@@ -18,7 +18,7 @@
 ---
 
 ## Tarea 3 — Revisar el carrito
-**Instrucción:** "Revisá lo que tenés en el carrito y cambiá la cantidad de uno de los productos."
+**Instrucción:** "Agregá 2 productos distintos al carrito y luego cambiá la cantidad de uno de ellos."
 
 **Qué valida:** usabilidad del drawer, stepper, claridad del resumen.
 
