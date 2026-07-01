@@ -57,9 +57,9 @@ const MOCK_ORDERS: MockOrder[] = [
 
 const statusColors: Record<OrderStatus, string> = {
   "Entregado": "bg-gray-100 text-gray-600",
-  "En camino": "bg-blue-50 text-blue-700",
-  "En preparación": "bg-yellow-50 text-yellow-700",
-  "Cancelado": "bg-red-50 text-red-600",
+  "En camino": "bg-gray-200 text-gray-700",
+  "En preparación": "bg-gray-100 text-gray-600",
+  "Cancelado": "bg-gray-100 text-gray-500",
 };
 
 export function AccountOrders() {

@@ -4,7 +4,6 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { useCart } from "../context/CartContext";
 import { toast } from "sonner";
-import { Minus, Plus } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
@@ -23,24 +22,18 @@ export function ProductCard({ product }: ProductCardProps) {
       price: product.pricePerUnit,
       unitsPerPack: product.unitsPerPack,
     });
-
     const newTotal = getTotalPacks() + 1;
     const remaining = Math.max(4 - newTotal, 0);
-
     if (remaining === 0) {
-      toast.success(`${product.name} agregado · Mínimo cumplido`);
+      toast.success(product.name + " agregado · Mínimo cumplido");
     } else {
-      toast.success(
-        `${product.name} agregado · ${remaining} pack${remaining === 1 ? "" : "s"} para el mínimo`
-      );
+      toast.success(product.name + " agregado · " + remaining + " pack" + (remaining === 1 ? "" : "s") + " para el mínimo");
     }
   };
 
   const handleDecrement = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (cartItem) {
-      updateQuantity(product.id, cartItem.quantity - 1);
-    }
+    if (cartItem) updateQuantity(product.id, cartItem.quantity - 1);
   };
 
   const handleIncrement = (e: React.MouseEvent) => {
@@ -54,7 +47,7 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Link to={`/product/${product.id}`} className="block group">
+    <Link to={"/product/" + product.id} className="block group">
       <div className="border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-white">
         {/* Imagen placeholder */}
         <div className="aspect-square bg-gray-100 relative">
@@ -83,33 +76,35 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Contenido */}
-        <div className="p-4">
-          <h3 className="font-medium text-black mb-1 text-sm leading-snug">{product.name}</h3>
+        <div className="p-3">
+          <h3 className="font-normal text-black mb-2 text-base leading-snug line-clamp-2">
+            {product.name}
+          </h3>
           <div className="mb-3">
-            <p className="text-base font-semibold text-black">
+            <p className="text-xl font-medium text-black leading-tight">
               ${packPrice.toLocaleString("es-AR")}
               <span className="text-xs font-normal text-gray-500 ml-1">el pack</span>
             </p>
-            <p className="text-xs text-gray-500">
-              ${product.pricePerUnit.toLocaleString("es-AR")} / unidad · Pack x{product.unitsPerPack}
+            <p className="text-sm text-gray-500 truncate mt-0.5">
+              ${product.pricePerUnit.toLocaleString("es-AR")} / unidad &middot; Pack x{product.unitsPerPack}
             </p>
           </div>
 
           {cartItem ? (
             <div
-              className="flex items-center justify-between border border-gray-300 rounded-lg overflow-hidden"
+              className="h-10 flex items-center justify-between border border-gray-300 rounded-lg overflow-hidden"
               onClick={(e) => e.preventDefault()}
             >
               <button
-                className="px-3 py-2.5 text-gray-700 hover:bg-gray-100 transition-colors font-medium text-lg leading-none"
+                className="px-3 h-full text-gray-700 hover:bg-gray-100 transition-colors font-medium text-lg leading-none"
                 onClick={handleDecrement}
                 aria-label="Quitar pack"
               >
-                −
+                &minus;
               </button>
               <span className="font-semibold text-black text-sm">{cartItem.quantity}</span>
               <button
-                className="px-3 py-2.5 text-gray-700 hover:bg-gray-100 transition-colors font-medium text-lg leading-none"
+                className="px-3 h-full text-gray-700 hover:bg-gray-100 transition-colors font-medium text-lg leading-none"
                 onClick={handleIncrement}
                 aria-label="Agregar pack"
               >
@@ -118,7 +113,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           ) : (
             <Button
-              className="w-full bg-black text-white hover:bg-gray-800 text-sm"
+              className="w-full h-10 bg-black text-white hover:bg-gray-800 text-sm"
               onClick={handleAddToCart}
             >
               Agregar

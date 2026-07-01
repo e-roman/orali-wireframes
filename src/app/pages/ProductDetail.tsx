@@ -162,7 +162,7 @@ export function ProductDetail() {
                   </span>
                   <button
                     className="px-4 py-3 text-gray-700 hover:bg-gray-100 transition-colors font-medium"
-                    onClick={() => setQuantity(quantity + 1)}
+                    onClick={() => setQuantity(Math.min(20, quantity + 1))}
                   >
                     <Plus className="h-4 w-4" />
                   </button>

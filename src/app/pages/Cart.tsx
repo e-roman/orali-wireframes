@@ -112,7 +112,7 @@ export function Cart() {
                       <button
                         aria-label="Eliminar producto"
                         onClick={() => removeItem(item.id)}
-                        className="text-gray-300 hover:text-red-400 transition-colors"
+                        className="text-gray-300 hover:text-gray-600 transition-colors"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -166,7 +166,7 @@ export function Cart() {
 
               {/* Progress mínimo */}
               <div
-                className={`rounded-lg p-3.5 mb-4 ${
+                className={`rounded-md p-3.5 mb-4 ${
                   minimumMet ? "bg-gray-50 border border-gray-200" : "bg-gray-50 border border-gray-200"
                 }`}
               >

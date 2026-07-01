@@ -7,7 +7,7 @@ export default function App() {
   return (
     <CartProvider>
       <RouterProvider router={router} />
-      <Toaster />
+      <Toaster position="top-right" />
     </CartProvider>
   );
 }

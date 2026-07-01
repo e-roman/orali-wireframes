@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router";
 import { useCart } from "../context/CartContext";
 import { Input } from "./ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
+import { CartDrawer } from "./CartDrawer";
 
 // Sub-item: if href is absent, renders as a non-clickable section header
 interface SubItem {
@@ -101,6 +102,7 @@ export function Navbar({ onSearchChange }: NavbarProps) {
   const location = useLocation();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const navRef = useRef<HTMLDivElement>(null);
 
@@ -235,14 +237,18 @@ export function Navbar({ onSearchChange }: NavbarProps) {
               <User className="h-5 w-5" />
             </Link>
 
-            <Link to="/cart" className="relative text-gray-700 hover:text-black transition-colors">
+            <button
+              onClick={() => setCartOpen(true)}
+              className="relative text-gray-700 hover:text-black transition-colors"
+              aria-label="Ver carrito"
+            >
               <ShoppingCart className="h-5 w-5" />
               {totalPacks > 0 && (
                 <span className="absolute -right-2 -top-2 h-4 w-4 flex items-center justify-center text-[10px] font-semibold bg-black text-white rounded-full">
                   {totalPacks}
                 </span>
               )}
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -328,14 +334,17 @@ export function Navbar({ onSearchChange }: NavbarProps) {
                 <span>Carrito</span>
                 {totalPacks > 0 && (
                   <span className="bg-white text-black text-xs font-bold px-2 py-0.5 rounded-full">
-                    {totalPacks}
-                  </span>
-                )}
-              </Link>
+                      {totalPacks}
+                    </span>
+                  )}
+                </Link>
             </div>
           </div>
         </SheetContent>
       </Sheet>
+
+      {/* Cart Drawer */}
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </nav>
   );
 }

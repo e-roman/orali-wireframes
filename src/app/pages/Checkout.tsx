@@ -11,7 +11,6 @@ import { Check, ChevronRight, CreditCard, Building2, Smartphone, Pencil } from "
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 type Step = "cuenta" | "envio" | "pago";
-type MetodoEntrega = "envio" | "retiro";
 type MetodoPago = "tarjeta" | "transferencia" | "mercadopago";
 
 const STEPS: { key: Step; label: string }[] = [
@@ -31,12 +30,6 @@ const FRANJAS = [
   "Jueves 14:00–18:00",
 ];
 
-const SUCURSALES = [
-  { id: "palermo", nombre: "Palermo", dir: "Thames 1234, CABA", horario: "Lun–Vie 9–18 · Sáb 9–13" },
-  { id: "belgrano", nombre: "Belgrano", dir: "Av. Cabildo 2567, CABA", horario: "Lun–Vie 9–18 · Sáb 9–13" },
-  { id: "san-isidro", nombre: "San Isidro", dir: "Av. del Libertador 890", horario: "Lun–Vie 9–17 · Sáb 9–12" },
-];
-
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export function Checkout() {
@@ -52,7 +45,6 @@ export function Checkout() {
   const [password, setPassword] = useState("");
 
   // — Envío —
-  const [metodoEntrega, setMetodoEntrega] = useState<MetodoEntrega>("envio");
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [direccion, setDireccion] = useState("");
@@ -62,7 +54,6 @@ export function Checkout() {
   const [telefono, setTelefono] = useState("");
   const [instrucciones, setInstrucciones] = useState("");
   const [franja, setFranja] = useState("");
-  const [sucursal, setSucursal] = useState("");
 
   // — Pago —
   const [metodoPago, setMetodoPago] = useState<MetodoPago>("tarjeta");
@@ -75,7 +66,7 @@ export function Checkout() {
 
   // — Cálculos —
   const subtotal = getSubtotal();
-  const shippingCost = metodoEntrega === "retiro" ? 0 : 1500;
+  const shippingCost = 1500;
   const currentStepIndex = STEPS.findIndex((s) => s.key === step);
 
   // Redirect si carrito vacío
@@ -110,7 +101,7 @@ export function Checkout() {
     const orderItems = items.map((i) => ({ ...i }));
     clearCart();
     navigate(`/order-confirmation/${orderId}`, {
-      state: { items: orderItems, subtotal, shipping: shippingCost, metodoEntrega },
+      state: { items: orderItems, subtotal, shipping: shippingCost },
     });
   };
 
@@ -148,9 +139,7 @@ export function Checkout() {
             <span className="text-gray-500">Envío</span>
             <span className="text-gray-400">
               {isEnvioKnown
-                ? metodoEntrega === "retiro"
-                  ? "Gratis (retiro)"
-                  : `$${shippingCost.toLocaleString("es-AR")}`
+                ? `$${shippingCost.toLocaleString("es-AR")}`
                 : "A calcular"}
             </span>
           </div>
@@ -170,7 +159,6 @@ export function Checkout() {
 
   // Resumen acumulativo de pasos completados (debajo del summary)
   function StepSummaries() {
-    const selectedSucursal = SUCURSALES.find((s) => s.id === sucursal);
     return (
       <div className="space-y-3">
         {/* Cuenta completada */}
@@ -203,19 +191,12 @@ export function Checkout() {
                 <Pencil className="h-3.5 w-3.5" />
               </button>
             </div>
-            {metodoEntrega === "envio" ? (
-              <div className="text-sm text-black space-y-0.5">
-                <p>{nombre} {apellido}</p>
-                <p className="text-gray-600">{direccion}{piso ? `, ${piso}` : ""}</p>
-                <p className="text-gray-600">{localidad}{cp ? ` (${cp})` : ""}</p>
-                {franja && <p className="text-gray-500 text-xs mt-1">{franja}</p>}
-              </div>
-            ) : selectedSucursal ? (
-              <div className="text-sm text-black space-y-0.5">
-                <p>Retiro en {selectedSucursal.nombre}</p>
-                <p className="text-gray-600 text-xs">{selectedSucursal.dir}</p>
-              </div>
-            ) : null}
+            <div className="text-sm text-black space-y-0.5">
+              <p>{nombre} {apellido}</p>
+              <p className="text-gray-600">{direccion}{piso ? `, ${piso}` : ""}</p>
+              <p className="text-gray-600">{localidad}{cp ? ` (${cp})` : ""}</p>
+              {franja && <p className="text-gray-500 text-xs mt-1">{franja}</p>}
+            </div>
           </div>
         )}
       </div>
@@ -392,137 +373,85 @@ export function Checkout() {
                 <h2 className="text-xl font-bold text-black mb-6">¿Cómo recibís tu pedido?</h2>
 
                 <form onSubmit={handleEnvioSubmit} className="space-y-6">
-                  {/* Método de entrega */}
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { key: "envio" as MetodoEntrega, label: "Envío a domicilio", desc: "Recibís en tu casa" },
-                      { key: "retiro" as MetodoEntrega, label: "Retiro en sucursal", desc: "Sin costo de envío" },
-                    ].map((opt) => (
-                      <button
-                        key={opt.key}
-                        type="button"
-                        onClick={() => setMetodoEntrega(opt.key)}
-                        className={`p-4 border rounded-xl text-left transition-colors ${
-                          metodoEntrega === opt.key
-                            ? "border-black bg-gray-50"
-                            : "border-gray-200 hover:border-gray-400"
-                        }`}
-                      >
-                        <p className="text-sm font-medium text-black">{opt.label}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">{opt.desc}</p>
-                      </button>
-                    ))}
+                  {/* Nombre y apellido */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-sm text-gray-700">Nombre</Label>
+                      <Input placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} required className="border-gray-300 mt-1" />
+                    </div>
+                    <div>
+                      <Label className="text-sm text-gray-700">Apellido</Label>
+                      <Input placeholder="Apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} required className="border-gray-300 mt-1" />
+                    </div>
                   </div>
 
-                  {metodoEntrega === "envio" ? (
-                    <>
-                      {/* Nombre y apellido */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="text-sm text-gray-700">Nombre</Label>
-                          <Input placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} required className="border-gray-300 mt-1" />
-                        </div>
-                        <div>
-                          <Label className="text-sm text-gray-700">Apellido</Label>
-                          <Input placeholder="Apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} required className="border-gray-300 mt-1" />
-                        </div>
-                      </div>
+                  {/* Dirección */}
+                  <div>
+                    <Label className="text-sm text-gray-700">Dirección</Label>
+                    <Input placeholder="Calle y número" value={direccion} onChange={(e) => setDireccion(e.target.value)} required className="border-gray-300 mt-1" />
+                  </div>
 
-                      {/* Dirección */}
-                      <div>
-                        <Label className="text-sm text-gray-700">Dirección</Label>
-                        <Input placeholder="Calle y número" value={direccion} onChange={(e) => setDireccion(e.target.value)} required className="border-gray-300 mt-1" />
-                      </div>
-
-                      {/* Piso y CP */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="text-sm text-gray-700">
-                            Piso / Depto <span className="text-gray-400 font-normal">(opcional)</span>
-                          </Label>
-                          <Input placeholder="ej: 3B" value={piso} onChange={(e) => setPiso(e.target.value)} className="border-gray-300 mt-1" />
-                        </div>
-                        <div>
-                          <Label className="text-sm text-gray-700">Código postal</Label>
-                          <Input placeholder="ej: 1425" value={cp} onChange={(e) => setCp(e.target.value)} required className="border-gray-300 mt-1" maxLength={8} />
-                        </div>
-                      </div>
-
-                      {/* Localidad y Tel */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="text-sm text-gray-700">Localidad</Label>
-                          <Input placeholder="ej: Palermo" value={localidad} onChange={(e) => setLocalidad(e.target.value)} required className="border-gray-300 mt-1" />
-                        </div>
-                        <div>
-                          <Label className="text-sm text-gray-700">Teléfono</Label>
-                          <Input type="tel" placeholder="11 4567-8901" value={telefono} onChange={(e) => setTelefono(e.target.value)} required className="border-gray-300 mt-1" />
-                        </div>
-                      </div>
-
-                      {/* Instrucciones */}
-                      <div>
-                        <Label className="text-sm text-gray-700">
-                          Instrucciones <span className="text-gray-400 font-normal">(opcional)</span>
-                        </Label>
-                        <Input placeholder="ej: Timbre roto, llamar al cel" value={instrucciones} onChange={(e) => setInstrucciones(e.target.value)} className="border-gray-300 mt-1" />
-                      </div>
-
-                      {/* Franja horaria */}
-                      <div>
-                        <Label className="text-sm font-medium text-black mb-3 block">
-                          Elegí una franja horaria de entrega
-                        </Label>
-                        <div className="grid grid-cols-2 gap-2">
-                          {FRANJAS.map((f) => (
-                            <button
-                              key={f}
-                              type="button"
-                              onClick={() => setFranja(f)}
-                              className={`p-3 border rounded-lg text-sm text-left transition-colors ${
-                                franja === f
-                                  ? "border-black bg-gray-50 font-medium text-black"
-                                  : "border-gray-200 text-gray-600 hover:border-gray-400"
-                              }`}
-                            >
-                              {f}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    /* Selector de sucursal */
+                  {/* Piso y CP */}
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-sm font-medium text-black mb-3 block">
-                        Elegí una sucursal
+                      <Label className="text-sm text-gray-700">
+                        Piso / Depto <span className="text-gray-400 font-normal">(opcional)</span>
                       </Label>
-                      <div className="space-y-2">
-                        {SUCURSALES.map((s) => (
-                          <button
-                            key={s.id}
-                            type="button"
-                            onClick={() => setSucursal(s.id)}
-                            className={`w-full p-4 border rounded-xl text-left transition-colors ${
-                              sucursal === s.id ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-400"
-                            }`}
-                          >
-                            <p className="text-sm font-medium text-black">{s.nombre}</p>
-                            <p className="text-xs text-gray-500 mt-0.5">{s.dir}</p>
-                            <p className="text-xs text-gray-400">{s.horario}</p>
-                          </button>
-                        ))}
-                      </div>
-                      <p className="text-xs text-gray-500 mt-3">
-                        El retiro es sin costo. Te avisamos por email cuando el pedido esté listo.
-                      </p>
+                      <Input placeholder="ej: 3B" value={piso} onChange={(e) => setPiso(e.target.value)} className="border-gray-300 mt-1" />
                     </div>
-                  )}
+                    <div>
+                      <Label className="text-sm text-gray-700">Código postal</Label>
+                      <Input placeholder="ej: 1425" value={cp} onChange={(e) => setCp(e.target.value)} required className="border-gray-300 mt-1" maxLength={8} />
+                    </div>
+                  </div>
+
+                  {/* Localidad y Tel */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-sm text-gray-700">Localidad</Label>
+                      <Input placeholder="ej: Palermo" value={localidad} onChange={(e) => setLocalidad(e.target.value)} required className="border-gray-300 mt-1" />
+                    </div>
+                    <div>
+                      <Label className="text-sm text-gray-700">Teléfono</Label>
+                      <Input type="tel" placeholder="11 4567-8901" value={telefono} onChange={(e) => setTelefono(e.target.value)} required className="border-gray-300 mt-1" />
+                    </div>
+                  </div>
+
+                  {/* Instrucciones */}
+                  <div>
+                    <Label className="text-sm text-gray-700">
+                      Instrucciones <span className="text-gray-400 font-normal">(opcional)</span>
+                    </Label>
+                    <Input placeholder="ej: Timbre roto, llamar al cel" value={instrucciones} onChange={(e) => setInstrucciones(e.target.value)} className="border-gray-300 mt-1" />
+                  </div>
+
+                  {/* Franja horaria */}
+                  <div>
+                    <Label className="text-sm font-medium text-black mb-3 block">
+                      Elegí una franja horaria de entrega
+                    </Label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {FRANJAS.map((f) => (
+                        <button
+                          key={f}
+                          type="button"
+                          onClick={() => setFranja(f)}
+                          className={`p-3 border rounded-lg text-sm text-left transition-colors ${
+                            franja === f
+                              ? "border-black bg-gray-50 font-medium text-black"
+                              : "border-gray-200 text-gray-600 hover:border-gray-400"
+                          }`}
+                        >
+                          {f}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
                   <Button
                     type="submit"
                     className="w-full bg-black text-white hover:bg-gray-800 h-11"
-                    disabled={metodoEntrega === "envio" ? !franja : !sucursal}
+                    disabled={!franja}
                   >
                     Continuar al pago <ChevronRight className="h-4 w-4 ml-1" />
                   </Button>

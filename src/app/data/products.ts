@@ -79,7 +79,7 @@ export const products: Product[] = [
   },
   {
     id: "rav-06",
-    name: "Ravioles de espinaca (vegano)",
+    name: "Ravioles de espinaca",
     category: "ravioles",
     pricePerUnit: 1400,
     unitsPerPack: 3,
@@ -88,7 +88,7 @@ export const products: Product[] = [
   },
   {
     id: "rav-07",
-    name: "Ravioles de calabaza (vegano)",
+    name: "Ravioles de calabaza",
     category: "ravioles",
     pricePerUnit: 1400,
     unitsPerPack: 3,
@@ -97,7 +97,7 @@ export const products: Product[] = [
   },
   {
     id: "rav-08",
-    name: "Ravioles de remolacha y tofu (vegano)",
+    name: "Ravioles de remolacha y tofu",
     category: "ravioles",
     pricePerUnit: 1450,
     unitsPerPack: 3,
@@ -106,7 +106,7 @@ export const products: Product[] = [
   },
   {
     id: "rav-09",
-    name: "Ravioles de texturizado de soja (vegano)",
+    name: "Ravioles de texturizado de soja",
     category: "ravioles",
     pricePerUnit: 1400,
     unitsPerPack: 3,
@@ -515,7 +515,7 @@ export const products: Product[] = [
   },
   {
     id: "emp-06",
-    name: "Empanadas de lentejas (vegano)",
+    name: "Empanadas de lentejas",
     category: "empanadas-rellenas",
     pricePerUnit: 640,
     unitsPerPack: 6,
@@ -524,7 +524,7 @@ export const products: Product[] = [
   },
   {
     id: "emp-07",
-    name: "Empanadas de calabaza (vegano)",
+    name: "Empanadas de calabaza",
     category: "empanadas-rellenas",
     pricePerUnit: 640,
     unitsPerPack: 6,
@@ -533,7 +533,7 @@ export const products: Product[] = [
   },
   {
     id: "emp-08",
-    name: "Empanadas de vegetales (vegano)",
+    name: "Empanadas de vegetales",
     category: "empanadas-rellenas",
     pricePerUnit: 630,
     unitsPerPack: 6,
@@ -542,7 +542,7 @@ export const products: Product[] = [
   },
   {
     id: "emp-09",
-    name: "Empanadas de soja (vegano)",
+    name: "Empanadas de soja",
     category: "empanadas-rellenas",
     pricePerUnit: 640,
     unitsPerPack: 6,
@@ -551,7 +551,7 @@ export const products: Product[] = [
   },
   {
     id: "emp-10",
-    name: "Empanadas de humita (vegano)",
+    name: "Empanadas de humita",
     category: "empanadas-rellenas",
     pricePerUnit: 640,
     unitsPerPack: 6,
@@ -560,7 +560,7 @@ export const products: Product[] = [
   },
   {
     id: "emp-11",
-    name: "Empanadas de berenjena (vegano)",
+    name: "Empanadas de berenjena",
     category: "empanadas-rellenas",
     pricePerUnit: 630,
     unitsPerPack: 6,
@@ -569,7 +569,7 @@ export const products: Product[] = [
   },
   {
     id: "emp-12",
-    name: "Empanadas de soja picante (vegano)",
+    name: "Empanadas de soja picante",
     category: "empanadas-rellenas",
     pricePerUnit: 650,
     unitsPerPack: 6,

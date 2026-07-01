@@ -1,0 +1,12 @@
+button,
+a,
+select,
+[role="button"],
+[role="option"],
+label[for] {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
