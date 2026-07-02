@@ -79,52 +79,82 @@ export function Home() {
         </div>
       </section>
 
-      {/* ¿Por qué en packs? */}
+      {/* ¿Cómo funciona? — Variante A */}
       <section className="bg-gray-50 border-b border-gray-200 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            {/* Texto */}
-            <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">
-                Nuestro modelo
-              </p>
-              <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
-                ¿Por qué viene en pack?
-              </h2>
-              <p className="text-gray-600 leading-relaxed">
-                Elaboramos en cantidad limitada cada día. Vendemos en packs para que
-                puedas stockearte y tener siempre pasta fresca en el freezer. El precio
-                que ves es el del pack completo.
-              </p>
-            </div>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
+            Variante A
+          </p>
+          <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
+            ¿Cómo funciona?
+          </h2>
+          <p className="text-gray-500 text-base mb-10 max-w-xl">
+            Hacemos las pastas cada mañana. Vos elegís los sabores y nosotros te los llevamos a casa.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                step: "1",
+                title: "Elegí tus pastas",
+                desc: "Explorá el catálogo y sumá al carrito los sabores que quieras. Sin límite por tipo de producto.",
+              },
+              {
+                step: "2",
+                title: "Completá el mínimo",
+                desc: "Necesitás 4 packs en total, combinando lo que quieras. La barra de progreso te guía en todo momento.",
+              },
+              {
+                step: "3",
+                title: "Te lo llevamos a casa",
+                desc: "Entregamos martes y viernes en CABA y GBA. Coordinás el día al hacer el pedido.",
+              },
+            ].map(({ step, title, desc }) => (
+              <div key={step} className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col gap-3">
+                <span className="text-3xl font-bold text-black">{step}</span>
+                <p className="text-base font-semibold text-black">{title}</p>
+                <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            {/* 3 pasos */}
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { step: "1", label: "1 unidad", sub: "para uno/a", highlight: false },
-                { step: "2", label: "2 unidades", sub: "para combinar", highlight: false },
-                { step: "3", label: "1 pack", sub: "precio final", highlight: true },
-              ].map(({ step, label, sub, highlight }) => (
-                <div
-                  key={step}
-                  className={`rounded-xl p-5 text-center border transition-all ${
-                    highlight
-                      ? "bg-black border-black text-white"
-                      : "bg-white border-gray-200 text-black"
-                  }`}
-                >
-                  <p className={`text-3xl font-bold mb-2 ${highlight ? "text-white" : "text-black"}`}>
-                    {step}
-                  </p>
-                  <p className={`text-sm font-medium ${highlight ? "text-white" : "text-black"}`}>
-                    {label}
-                  </p>
-                  <p className={`text-xs mt-0.5 ${highlight ? "text-gray-300" : "text-gray-400"}`}>
-                    {sub}
-                  </p>
-                </div>
-              ))}
-            </div>
+      {/* ¿Cómo funciona? — Variante B */}
+      <section className="bg-white border-b border-gray-200 py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
+            Variante B
+          </p>
+          <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
+            ¿Cómo funciona?
+          </h2>
+          <p className="text-gray-500 text-base mb-10 max-w-xl">
+            Tres pasos, sin complicaciones.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-gray-200 border border-gray-200 rounded-xl overflow-hidden">
+            {[
+              {
+                step: "01",
+                title: "Elegí lo que querés",
+                desc: "Navegá por tipo de producto o filtros dietarios. Precio por pack visible en cada card.",
+              },
+              {
+                step: "02",
+                title: "Armá tu pedido",
+                desc: "Mínimo 4 packs, combinando lo que quieras. Sin mínimo por sabor ni por categoría.",
+              },
+              {
+                step: "03",
+                title: "Recibís en tu casa",
+                desc: "Martes y viernes. Gratis en CABA desde $5.000. Productos frescos del día de la entrega.",
+              },
+            ].map(({ step, title, desc }) => (
+              <div key={step} className="flex flex-col gap-3 p-8 bg-white">
+                <span className="text-xs font-mono font-semibold text-gray-400 tracking-widest">{step}</span>
+                <p className="text-base font-semibold text-black leading-snug">{title}</p>
+                <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

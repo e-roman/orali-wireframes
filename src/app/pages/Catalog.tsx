@@ -203,11 +203,12 @@ export function Catalog() {
               </button>
             );
           })}
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-2">
+            <span className="text-sm text-gray-500 whitespace-nowrap">Ordenar por</span>
             <select
               value={sortKey}
               onChange={(e) => setSortKey(e.target.value as SortKey)}
-              className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 text-gray-600 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400 cursor-pointer"
+              className="text-sm border border-gray-300 rounded-lg pl-3 pr-8 py-1.5 text-gray-600 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400 cursor-pointer"
             >
               {sortOptions.map((o) => (
                 <option key={o.key} value={o.key}>{o.label}</option>
