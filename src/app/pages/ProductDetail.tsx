@@ -6,24 +6,21 @@ import { ProductCard } from "../components/ProductCard";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { useCart } from "../context/CartContext";
-import { products } from "../data/products";
+import { products, dietaryLabels, formatWeight } from "../data/products";
 import { Minus, Plus, ShoppingCart, Truck, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 
 const categoryLabels: Record<string, string> = {
-  pastas: "Pastas",
-  tapas: "Tapas",
-  empanadas: "Empanadas",
+  ravioles: "Ravioles",
+  "sorrentinos-capeletti": "Sorrentinos y Capeletti",
+  noquis: "Ñoquis",
+  fideos: "Fideos",
+  "tapas-empanadas": "Tapas para empanadas",
+  "tapas-copetin": "Tapas para copetín y pastelitos",
+  "tapas-pascualinas": "Tapas para pascualinas",
+  tortillas: "Tortillas",
+  "empanadas-rellenas": "Empanadas rellenas",
   especiales: "Especiales",
-};
-
-const dietaryLabels: Record<string, string> = {
-  "sin-tacc": "Sin TACC",
-  vegano: "Vegano",
-  integral: "Integral",
-  "sin-sal": "Sin Sal",
-  vegetariano: "Vegetariano",
-  premium: "Premium",
 };
 
 export function ProductDetail() {
@@ -33,6 +30,7 @@ export function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [postalCode, setPostalCode] = useState("");
   const [deliveryStatus, setDeliveryStatus] = useState<null | "checking" | "ok" | "no">(null);
+  const [activeTab, setActiveTab] = useState<"descripcion" | "especificaciones">("descripcion");
 
   const product = products.find((p) => p.id === id);
 
@@ -130,7 +128,16 @@ export function ProductDetail() {
             )}
 
             <h1 className="text-3xl font-bold text-black mb-2">{product.name}</h1>
-            <p className="text-gray-600 mb-6 leading-relaxed">{product.description}</p>
+            <p className="text-gray-600 mb-3 leading-relaxed">{product.description}</p>
+            <button
+              onClick={() => {
+                setActiveTab("especificaciones");
+                document.getElementById("tabs-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+              className="text-sm text-black underline underline-offset-2 hover:text-gray-600 transition-colors mb-6 inline-block"
+            >
+              Ver características
+            </button>
 
             {/* Bloque de precio */}
             <div className="border border-gray-200 rounded-lg p-5 mb-6">
@@ -139,8 +146,10 @@ export function ProductDetail() {
                 <span className="text-base font-normal text-gray-500 ml-2">el pack</span>
               </p>
               <p className="text-sm text-gray-500 mt-1">
-                ${product.pricePerUnit.toLocaleString("es-AR")} por unidad &middot; Pack de{" "}
-                {product.unitsPerPack} {product.unitsPerPack === 1 ? "unidad" : "unidades"}
+                ${product.pricePerUnit.toLocaleString("es-AR")} por unidad &middot;{" "}
+                {formatWeight(product.weightGrams)}
+                {product.pieceCount ? ` · ${product.pieceCount} unidades` : ""} &middot; viene en pack de{" "}
+                {product.unitsPerPack}
               </p>
             </div>
 
@@ -222,6 +231,70 @@ export function ProductDetail() {
                 </p>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Tabs: Descripción / Especificaciones */}
+        <div id="tabs-section" className="mt-14 pt-2">
+          <div className="flex items-center gap-6 border-b border-gray-200">
+            <button
+              onClick={() => setActiveTab("descripcion")}
+              className={`pb-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
+                activeTab === "descripcion"
+                  ? "text-black border-black"
+                  : "text-gray-400 border-transparent hover:text-gray-600"
+              }`}
+            >
+              Descripción
+            </button>
+            <button
+              onClick={() => setActiveTab("especificaciones")}
+              className={`pb-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
+                activeTab === "especificaciones"
+                  ? "text-black border-black"
+                  : "text-gray-400 border-transparent hover:text-gray-600"
+              }`}
+            >
+              Especificaciones
+            </button>
+          </div>
+
+          <div className="py-8">
+            {activeTab === "descripcion" ? (
+              <p className="text-gray-600 leading-relaxed max-w-2xl">{product.description}</p>
+            ) : (
+              <dl className="max-w-xl divide-y divide-gray-100 text-sm">
+                <div className="flex justify-between py-2.5">
+                  <dt className="text-gray-500">Categoría</dt>
+                  <dd className="text-black font-medium">{categoryLabel}</dd>
+                </div>
+                <div className="flex justify-between py-2.5">
+                  <dt className="text-gray-500">Peso</dt>
+                  <dd className="text-black font-medium">
+                    {formatWeight(product.weightGrams)}
+                    {product.pieceCount ? ` (${product.pieceCount} unidades)` : ""}
+                  </dd>
+                </div>
+                <div className="flex justify-between py-2.5">
+                  <dt className="text-gray-500">Unidades por pack</dt>
+                  <dd className="text-black font-medium">{product.unitsPerPack}</dd>
+                </div>
+                <div className="flex justify-between py-2.5">
+                  <dt className="text-gray-500">Precio por unidad</dt>
+                  <dd className="text-black font-medium">
+                    ${product.pricePerUnit.toLocaleString("es-AR")}
+                  </dd>
+                </div>
+                {product.dietary.length > 0 && (
+                  <div className="flex justify-between py-2.5">
+                    <dt className="text-gray-500">Características</dt>
+                    <dd className="text-black font-medium text-right">
+                      {product.dietary.map((d) => dietaryLabels[d] ?? d).join(" · ")}
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            )}
           </div>
         </div>
 

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { ShoppingCart, Search, User, ChevronDown, Menu } from "lucide-react";
+import { ShoppingCart, Search, User, ChevronDown, Menu, HelpCircle } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router";
 import { useCart } from "../context/CartContext";
 import { Input } from "./ui/input";
@@ -128,7 +128,8 @@ export function Navbar({ onSearchChange }: NavbarProps) {
   return (
     <nav className="border-b border-gray-300 bg-white sticky top-0 z-40" ref={navRef}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center gap-6">
+        {/* Top row: logo, search, account, cart */}
+        <div className="flex h-16 items-center gap-4">
           {/* Mobile hamburger */}
           <button
             className="md:hidden text-gray-700 hover:text-black transition-colors"
@@ -139,88 +140,18 @@ export function Navbar({ onSearchChange }: NavbarProps) {
           </button>
 
           {/* Logo */}
-          <Link to="/" className="text-xl font-semibold text-black flex-shrink-0 mr-2">
+          <Link to="/" className="text-3xl sm:text-4xl font-bold text-black flex-shrink-0 mr-10">
             Orali
           </Link>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-0.5 flex-shrink-0">
-            {menuItems.map((item) => (
-              <div key={item.id} className="relative">
-                {item.sub.length > 0 ? (
-                  <>
-                    <button
-                      className="flex items-center gap-1 px-3 py-2 text-sm text-gray-700 hover:text-black hover:bg-gray-50 rounded transition-colors"
-                      onClick={() =>
-                        setOpenMenu(openMenu === item.id ? null : item.id)
-                      }
-                    >
-                      {item.label}
-                      <ChevronDown
-                        className={`h-3 w-3 transition-transform ${
-                          openMenu === item.id ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-
-                    {openMenu === item.id && (
-                      <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg min-w-[220px] py-1.5 z-50">
-                        {item.sub.map((sub, idx) =>
-                          !sub.href ? (
-                            // Section header (non-clickable)
-                            <p
-                              key={`header-${idx}`}
-                              className="px-4 pt-2 pb-1 text-[10px] font-semibold text-gray-400 uppercase tracking-wider"
-                            >
-                              {sub.label}
-                            </p>
-                          ) : (
-                            // Clickable link
-                            <Link
-                              key={sub.href}
-                              to={sub.href}
-                              className={`block py-1.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors ${
-                                sub.indent ? "px-7" : "px-4"
-                              }`}
-                              onClick={() => setOpenMenu(null)}
-                            >
-                              {sub.label}
-                            </Link>
-                          )
-                        )}
-
-                        {/* "Ver todos" al final */}
-                        <div className="border-t border-gray-100 my-1" />
-                        <Link
-                          to={item.href}
-                          className="block px-4 py-1.5 text-xs text-gray-400 hover:text-black hover:bg-gray-50 transition-colors"
-                          onClick={() => setOpenMenu(null)}
-                        >
-                          Ver todos
-                        </Link>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <Link
-                    to={item.href}
-                    className="block px-3 py-2 text-sm text-gray-700 hover:text-black hover:bg-gray-50 rounded transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                )}
-              </div>
-            ))}
-          </div>
-
           {/* Search */}
-          <div className="flex-1 max-w-xs hidden md:block">
+          <div className="flex-1 hidden md:block mr-10">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
                 type="search"
-                placeholder="Buscar productos..."
-                className="pl-9 bg-gray-50 border-gray-300 h-9 text-sm"
+                placeholder="Buscar producto o categoría"
+                className="pl-9 bg-gray-50 border-gray-300 h-10 text-sm"
                 value={searchValue}
                 onChange={(e) => handleSearch(e.target.value)}
               />
@@ -228,13 +159,13 @@ export function Navbar({ onSearchChange }: NavbarProps) {
           </div>
 
           {/* Right icons */}
-          <div className="flex items-center gap-4 ml-auto">
+          <div className="flex items-center gap-4 ml-auto md:ml-0">
             <Link
               to="/account"
-              className="text-gray-500 hover:text-black transition-colors hidden md:block"
-              aria-label="Mi cuenta"
+              className="hidden md:flex items-center gap-2 px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-full hover:text-black hover:border-black transition-colors"
             >
-              <User className="h-5 w-5" />
+              <User className="h-4 w-4" />
+              Ingresar / Registrarse
             </Link>
 
             <button
@@ -264,6 +195,85 @@ export function Navbar({ onSearchChange }: NavbarProps) {
               onChange={(e) => handleSearch(e.target.value)}
             />
           </div>
+        </div>
+
+        {/* Bottom row: navbar */}
+        <div className="hidden md:flex items-center gap-0.5 h-12">
+          <span className="text-sm font-medium text-black mr-2">Nuestros productos:</span>
+          {menuItems.map((item) => (
+            <div key={item.id} className="relative">
+              {item.sub.length > 0 ? (
+                <>
+                  <button
+                    className="flex items-center gap-1 px-3 py-2 text-sm text-gray-700 hover:text-black hover:bg-gray-50 rounded transition-colors"
+                    onClick={() =>
+                      setOpenMenu(openMenu === item.id ? null : item.id)
+                    }
+                  >
+                    {item.label}
+                    <ChevronDown
+                      className={`h-3 w-3 transition-transform ${
+                        openMenu === item.id ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {openMenu === item.id && (
+                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg min-w-[220px] py-1.5 z-50">
+                      {item.sub.map((sub, idx) =>
+                        !sub.href ? (
+                          // Section header (non-clickable)
+                          <p
+                            key={`header-${idx}`}
+                            className="px-4 pt-2 pb-1 text-[10px] font-semibold text-gray-400 uppercase tracking-wider"
+                          >
+                            {sub.label}
+                          </p>
+                        ) : (
+                          // Clickable link
+                          <Link
+                            key={sub.href}
+                            to={sub.href}
+                            className={`block py-1.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors ${
+                              sub.indent ? "px-7" : "px-4"
+                            }`}
+                            onClick={() => setOpenMenu(null)}
+                          >
+                            {sub.label}
+                          </Link>
+                        )
+                      )}
+
+                      {/* "Ver todos" al final */}
+                      <div className="border-t border-gray-100 my-1" />
+                      <Link
+                        to={item.href}
+                        className="block px-4 py-1.5 text-xs text-gray-400 hover:text-black hover:bg-gray-50 transition-colors"
+                        onClick={() => setOpenMenu(null)}
+                      >
+                        Ver todos
+                      </Link>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Link
+                  to={item.href}
+                  className="block px-3 py-2 text-sm text-gray-700 hover:text-black hover:bg-gray-50 rounded transition-colors"
+                >
+                  {item.label}
+                </Link>
+              )}
+            </div>
+          ))}
+
+          <Link
+            to="/faq"
+            className="flex items-center gap-1.5 text-sm text-gray-700 hover:text-black transition-colors ml-auto"
+          >
+            <HelpCircle className="h-3.5 w-3.5" />
+            Cómo funciona
+          </Link>
         </div>
       </div>
 

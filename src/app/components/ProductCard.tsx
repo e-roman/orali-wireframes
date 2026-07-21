@@ -1,9 +1,20 @@
 import { Link } from "react-router";
-import { Product } from "../data/products";
+import { Product, dietaryLabels, formatWeight } from "../data/products";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { useCart } from "../context/CartContext";
 import { toast } from "sonner";
+
+// Un solo badge visible por card, en orden de prioridad
+const badgePriority: (keyof typeof dietaryLabels)[] = [
+  "premium",
+  "congelado",
+  "sin-tacc",
+  "vegano",
+  "vegetariano",
+  "integral",
+  "sin-sal",
+];
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +24,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const { addItem, updateQuantity, items, getTotalPacks } = useCart();
   const cartItem = items.find((i) => i.id === product.id);
   const packPrice = product.pricePerUnit * product.unitsPerPack;
+  const badgeTag = badgePriority.find((tag) => product.dietary.includes(tag));
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -47,46 +59,38 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Link to={"/product/" + product.id} className="block group">
-      <div className="border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-white">
+    <Link to={"/product/" + product.id} className="block group h-full">
+      <div className="h-full flex flex-col border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-white">
         {/* Imagen placeholder */}
         <div className="aspect-square bg-gray-100 relative">
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-xs text-gray-400 uppercase tracking-wide">Imagen</span>
           </div>
-          {product.dietary.length > 0 && (
-            <div className="absolute top-2 left-2 flex flex-col gap-1">
-              {product.dietary.includes("sin-tacc") && (
-                <Badge variant="secondary" className="bg-white text-black text-xs border border-gray-200">
-                  Sin TACC
-                </Badge>
-              )}
-              {product.dietary.includes("vegano") && (
-                <Badge variant="secondary" className="bg-white text-black text-xs border border-gray-200">
-                  Vegano
-                </Badge>
-              )}
-              {product.dietary.includes("vegetariano") && !product.dietary.includes("vegano") && (
-                <Badge variant="secondary" className="bg-white text-black text-xs border border-gray-200">
-                  Vegetariano
-                </Badge>
-              )}
+          {badgeTag && (
+            <div className="absolute top-2 left-2">
+              <Badge variant="secondary" className="bg-white text-black text-xs border border-gray-200">
+                {dietaryLabels[badgeTag]}
+              </Badge>
             </div>
           )}
         </div>
 
         {/* Contenido */}
-        <div className="p-3">
-          <h3 className="font-normal text-black mb-2 text-base leading-snug line-clamp-2">
+        <div className="p-3 flex flex-col flex-1">
+          <h3 className="font-normal text-black mb-1 text-base leading-snug line-clamp-2">
             {product.name}
           </h3>
-          <div className="mb-3">
+          <p className="text-sm text-gray-500 mb-2">
+            {formatWeight(product.weightGrams)}
+            {product.pieceCount ? ` · ${product.pieceCount} unidades` : ""} · pack x{product.unitsPerPack}
+          </p>
+          <div className="mb-3 mt-auto">
             <p className="text-xl font-medium text-black leading-tight">
               ${packPrice.toLocaleString("es-AR")}
               <span className="text-xs font-normal text-gray-500 ml-1">el pack</span>
             </p>
             <p className="text-sm text-gray-500 truncate mt-0.5">
-              ${product.pricePerUnit.toLocaleString("es-AR")} / unidad &middot; Pack x{product.unitsPerPack}
+              ${product.pricePerUnit.toLocaleString("es-AR")} por unidad
             </p>
           </div>
 

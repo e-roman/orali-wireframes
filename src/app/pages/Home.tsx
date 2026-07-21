@@ -36,7 +36,7 @@ export function Home() {
       <Navbar />
 
       {/* Hero — 2 columnas */}
-      <section className="border-b border-gray-200">
+      <section className="border-b border-gray-200 bg-[#efefef]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             {/* Texto */}
@@ -55,12 +55,6 @@ export function Home() {
                 <Button asChild size="lg" className="bg-black text-white hover:bg-gray-800">
                   <Link to="/catalog">Ver todos los productos</Link>
                 </Button>
-                <Link
-                  to="/faq"
-                  className="text-sm text-gray-600 hover:text-black underline underline-offset-2 transition-colors"
-                >
-                  ¿Cómo comprar?
-                </Link>
               </div>
             </div>
 
@@ -79,79 +73,36 @@ export function Home() {
         </div>
       </section>
 
-      {/* ¿Cómo funciona? — Variante A */}
-      <section className="bg-gray-50 border-b border-gray-200 py-16">
+      {/* ¿Cómo funciona? */}
+      <section className="bg-white py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
-            Variante A
-          </p>
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
             ¿Cómo funciona?
           </h2>
           <p className="text-gray-500 text-base mb-10 max-w-xl">
-            Hacemos las pastas cada mañana. Vos elegís los sabores y nosotros te los llevamos a casa.
+            Vos elegís los productos y nosotros te los llevamos a casa.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
-                step: "1",
+                step: "01",
                 title: "Elegí tus pastas",
-                desc: "Explorá el catálogo y sumá al carrito los sabores que quieras. Sin límite por tipo de producto.",
+                desc: "Explorá el catálogo y combiná tus sabores favoritos.",
               },
               {
-                step: "2",
-                title: "Completá el mínimo",
-                desc: "Necesitás 4 packs en total, combinando lo que quieras. La barra de progreso te guía en todo momento.",
+                step: "02",
+                title: "Completá 4 packs",
+                desc: "Podés combinar los productos que quieras. La barra te muestra cuánto te falta.",
               },
               {
-                step: "3",
-                title: "Te lo llevamos a casa",
-                desc: "Entregamos martes y viernes en CABA y GBA. Coordinás el día al hacer el pedido.",
+                step: "03",
+                title: "Recibilas en casa",
+                desc: "Elegí el día de entrega y disfrutá tus pastas en CABA y GBA.",
               },
             ].map(({ step, title, desc }) => (
               <div key={step} className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col gap-3">
                 <span className="text-3xl font-bold text-black">{step}</span>
                 <p className="text-base font-semibold text-black">{title}</p>
-                <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ¿Cómo funciona? — Variante B */}
-      <section className="bg-white border-b border-gray-200 py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
-            Variante B
-          </p>
-          <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
-            ¿Cómo funciona?
-          </h2>
-          <p className="text-gray-500 text-base mb-10 max-w-xl">
-            Tres pasos, sin complicaciones.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-gray-200 border border-gray-200 rounded-xl overflow-hidden">
-            {[
-              {
-                step: "01",
-                title: "Elegí lo que querés",
-                desc: "Navegá por tipo de producto o filtros dietarios. Precio por pack visible en cada card.",
-              },
-              {
-                step: "02",
-                title: "Armá tu pedido",
-                desc: "Mínimo 4 packs, combinando lo que quieras. Sin mínimo por sabor ni por categoría.",
-              },
-              {
-                step: "03",
-                title: "Recibís en tu casa",
-                desc: "Martes y viernes. Gratis en CABA desde $5.000. Productos frescos del día de la entrega.",
-              },
-            ].map(({ step, title, desc }) => (
-              <div key={step} className="flex flex-col gap-3 p-8 bg-white">
-                <span className="text-xs font-mono font-semibold text-gray-400 tracking-widest">{step}</span>
-                <p className="text-base font-semibold text-black leading-snug">{title}</p>
                 <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
               </div>
             ))}
@@ -168,7 +119,7 @@ export function Home() {
               to="/catalog"
               className="text-sm text-gray-500 hover:text-black transition-colors"
             >
-              Ver todo →
+              Ver todo
             </Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
